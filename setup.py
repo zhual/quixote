@@ -18,4 +18,10 @@ setuptools.setup(
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Operating System :: OS Independent",
     ],
+    install_requires=[
+        "typing>=3.6.6",
+        "setuptools>=39.0.1",
+        "pip>=9.0.3",
+        "PyYAML>=3.13"
+    ]
 )

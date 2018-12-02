@@ -14,3 +14,7 @@ python3 setup.py sdist bdist_wheel
 # Uploading pyquixote-0.0.1.tar.gz
 # 100%|█████████████████████| 4.25k/4.25k [00:01<00:00, 3.05kB/s]
 twine upload dist/*
+
+# pipreqs .  to shows package requirements
+# and dont forget update install_requirements field in setup.py
+pipreqs .
