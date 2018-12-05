@@ -11,11 +11,13 @@ So quixote's graph consists of two things, Node and Bind, Node is in which the d
 And quixote's dataflow graph is like below.
 ![graph](image/graph.png)(image is powered by graphviz, rectangle represents Node, and data Bind is presented by arrowed spline, green ones are updated with newest data feed, this image is from one real airplane system project I'm leading)
 
-In the quixote dataflow graph, left node(or forward nodes) is data feed of right linked ones. Once left node is updated successfully, it will output and push its newest result into linked node's input. When one node's forward, or "data dependent nodes", all updated successfully (newest data feed is ready), this node will try to update itself's output with respect to the newest data inputs. The `update` function is user defined, quixote graph will call it on evaluation time in data dependency order. When node's `update` function is called, quixote will make sure that all it's data inputs are updated and ready to be read. All the node should do is take different sources of data and calculate or transform input data and put them into its outputs. (Tunnel is a simple node takes one input and transform into one output, it helps graph more self explainable when node's input takes single specific data over a large amount of complex data with a lot of redundant information, I mean if our data interface is opaque, how can we expect node's behavior from that?)
+___In the quixote dataflow graph, left node(or forward nodes) is data feed of right linked ones. Once left node is updated successfully, it will output and push its newest result into linked node's input. When one node's forward, or "data dependent nodes", all updated successfully (newest data feed is ready), this node will try to update itself's output with respect to the newest data inputs. The `update` function is user defined, quixote graph will call it on evaluation time in data dependency order. When node's `update` function is called, quixote will make sure that all it's data inputs are updated and ready to be read. All the node should do is take different sources of data and calculate or transform input data and put them into its outputs. (Tunnel is a simple node takes one input and transform into one output, it helps graph more self explainable when node's input takes single specific data over a large amount of complex data with a lot of redundant information, I mean if our data interface is opaque, how can we expect node's behavior from that?)___
 
 > Be noticed that you should not change forward node's input data, it is possible to but quite an undefined behavior.
 
-WHY? You must have question like "WHY WE BOTHER DO THIS"?
+# WHY? 
+
+You must have question like "WHY WE BOTHER DO THIS"?
 
 Let me list some of advantages comes with quixote's data processing paradigm.
 
@@ -59,6 +61,9 @@ And this will install `graphviz` python binding package
 * [https://pypi.org/project/graphviz/](https://pypi.org/project/graphviz/)
 * [https://graphviz.readthedocs.io/en/stable/manual.html](https://graphviz.readthedocs.io/en/stable/manual.html)
 * [https://stackoverflow.com/questions/18438997/why-is-pydot-unable-to-find-graphvizs-executables-in-windows-8](https://stackoverflow.com/questions/18438997/why-is-pydot-unable-to-find-graphvizs-executables-in-windows-8)
+
+# Usage
+
 
 
 
