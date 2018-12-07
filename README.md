@@ -1,3 +1,13 @@
+```
+#
+#  ██████╗ ██╗   ██╗██╗██╗  ██╗ ██████╗ ████████╗███████╗    ██████╗ ██████╗ ██████╗ ███████╗
+# ██╔═══██╗██║   ██║██║╚██╗██╔╝██╔═══██╗╚══██╔══╝██╔════╝   ██╔════╝██╔═══██╗██╔══██╗██╔════╝
+# ██║   ██║██║   ██║██║ ╚███╔╝ ██║   ██║   ██║   █████╗     ██║     ██║   ██║██████╔╝█████╗
+# ██║▄▄ ██║██║   ██║██║ ██╔██╗ ██║   ██║   ██║   ██╔══╝     ██║     ██║   ██║██╔══██╗██╔══╝
+# ╚██████╔╝╚██████╔╝██║██╔╝ ██╗╚██████╔╝   ██║   ███████╗██╗╚██████╗╚██████╔╝██║  ██║███████╗
+#  ╚══▀▀═╝  ╚═════╝ ╚═╝╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚══════╝╚═╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+```
+
 Quixote is a minimal dataflow based computational graph skeleton library
 
 It provides you a clean and right-thinking data processing paradigm.
@@ -43,6 +53,42 @@ You could get quixote by pip.
 pip install pyquixote
 ```
 
+You can validate the installation by `import quixote.core` and you should see 😊
+```
+import quixote.core
+#
+#                                                    ==(W{==========-      /===-
+#                                                      ||  (.--.)         /===-_---~~~~~~~~~------____
+#                                                      | \_,|**|,__      |===-~___                _,-'
+#                                         -==\\        `\ ' `--'   ),    `//~\\   ~~~~`---.___.-~~
+#                                     ______-==|        /`\_. .__/\ \    | |  \\           _-~`
+#                               __--~~~  ,-/-==\\      (   | .  |~~~~|   | |   `\        ,'
+#                            _-~       /'    |  \\     )__/==0==-\<>/   / /      \      /
+#                          .'        /       |   \\      /~\___/~~\/  /' /        \   /'
+#                         /  ____  /         |    \`\.__/-~~   \  |_/'  /          \/'
+#                        /-'~    ~~~~~---__  |     ~-/~         ( )   /'        _--~`
+#                                          \_|      /        _) | ;  ),   __--~~
+#                                            '~~--_/      _-~/- |/ \   '-~ \
+#                                           {\__--_/}    / \\_>-|)<__\      \
+#                                           /'   (_/  _-~  | |__>--<__|      |
+#                                          |   _/) )-~     | |__>--<__|      |
+#                                          / /~ ,_/       / /__>---<__/      |
+#                                         o-o _//        /-~_>---<__-~      /
+#                                         (^(~          /~_>---<__-      _-~
+#                                        ,/|           /__>--<__/     _-~
+#                                     ,//('(          |__>--<__|     /                  .----_
+#                                    ( ( '))          |__>--<__|    |                 /' _---_~\
+#                                 `-)) )) (           |__>--<__|    |               /'  /     ~\`\
+#                                ,/,'//( (             \__>--<__\    \            /'  //        ||
+#                              ,( ( ((, ))              ~-__>--<_~-_  ~--____---~' _/'/        /'
+#                            `~/  )` ) ,/|                 ~-_~>--<_/-__       __-~ _/
+#                          ._-~//( )/ )) `                    ~~-'_/_/ /~~~~~~~__--~
+#                           ;'( ')/ ,)(                              ~~~~~~~~~~
+#                          ' ') '( (/
+#                            '   '  `
+....
+```
+
 Graphviz library is optional, if you want to visualize the data graph please install `graphviz`
 
 It is recommanded to use `anaconda` for `graphviz` installation and development.
@@ -63,7 +109,83 @@ And this will install `graphviz` python binding package
 * [https://stackoverflow.com/questions/18438997/why-is-pydot-unable-to-find-graphvizs-executables-in-windows-8](https://stackoverflow.com/questions/18438997/why-is-pydot-unable-to-find-graphvizs-executables-in-windows-8)
 
 # Usage
+```Python
 
+from quixote.core import QNode, QGraph, QTunnel, qlog
+from typing import List, Dict, Tuple
+
+class Contact(QNode):
+    def __init__(self):
+        super().__init__() # don't forget init super class QNode
+
+        # EVERY THING SHOULD BE DEFINED HERE WITH TYPE HINTS, before evaluation starts
+
+        # `const`, `var`, `qin`, `qout` are builtin js-object like object in `QNode`
+        # every thing defined in `const` should not be modified after first assignment
+        self.const.mycontacts: List[Dict[str, str]] = [
+            {
+                "name": "Johanna",
+                "phone": "132-987-098"
+            }, 
+            {
+                "name": "Steve",
+                "phone": "167-321-777"
+            }
+        ]
+        # Things defined in `var` are mutable, they are states maintained in `QNode` itself
+        # and not accessible to other `QNode`s
+        self.var.count: int = 0
+
+        # attribute defined in `qout` is `QNode`'s data "interface", it will be pushed to 
+        # linked `QNode`'s `qin.some_attrib` when it `update` successfully
+        self.qout.contacts: List[Tuple[str, str]] = [] # type hint tells the difference!
+
+    def update(self) -> bool: # `update` is abstract method should be implemented
+        try:
+            self.var.count = len(self.const.mycontacts)
+            self.qout.contacts = [ (contact["name"], contact["phone"]) for contact in  self.const.mycontacts ]
+        except Exception:
+            print("some error")
+            return False   # quixote will pause the following evaluation when it meets `update` error
+        
+        return True # `update` successfully
+
+class PrintNames(QNode):
+    def __init__(self):
+        super().__init__()
+        self.qin.contacts: List[Tuple[str, str]] = []
+        self.qin.names: List[str] = []
+    
+    def update(self) -> bool:
+        print(self.qin.names)
+        return True
+    
+if "__main__" == __name__:
+
+    contactbook = Contact()
+    prints = PrintNames()
+
+    datatunnel = QTunnel( lambda contacts: [ x[0] for x in contacts ] )
+    
+    contactbook.bind("contacts", datatunnel).bind("names", prints) # forward bind data interface
+    prints.rbind("contacts", contactbook) # also can reverse bind data interface
+    # prints.rbind("contacts", contactbook, "contacts") do the same thing... the line above is a suger
+
+    QGraph.get_default().view() # Graphviz Libaray must be installed if you want to see graph
+    QGraph.get_default().debugstepview = True # show every step debug graph
+    prints.eval() # evaluate the terminal node and see how much time elapsed
+```
+
+The example's result will be like below.
+```
+['Johanna', 'Steve'] 
+Press Enter to continue...
+```
+
+Best wishes:
+I hope you enjoy using this library 😊
+
+Author: ZIJIAN JIANG
 
 
 

@@ -403,7 +403,7 @@ class QGraph:
         head_bgcolor = "BLACK" if self._dirty[node] else "GREEN"
         font_color = "WHITE" if head_bgcolor == "BLACK" else "BLACK"
         if isinstance(node, QTunnel):
-            table = ET.Element("TABLE", {"BORDER":"1", "CELLBORDER":"1", "CELLSPACING":"0", "CELLPADDING": "0", "PADDING": "0"})
+            table = ET.Element("TABLE", {"BORDER":"1", "CELLBORDER":"1", "CELLSPACING":"0", "CELLPADDING": "0"})
             tr_class = ET.SubElement(table, "TR")
             td_class = ET.SubElement(tr_class, "TD", {"COLSPAN": "2", "BGCOLOR": head_bgcolor})
             font = ET.SubElement(td_class, "FONT", {"COLOR": font_color})
@@ -421,7 +421,7 @@ class QGraph:
             return "<" + ET.tostring(table, encoding="unicode") + ">"
 
         else:
-            table = ET.Element("TABLE", {"BORDER":"1", "CELLBORDER":"1", "CELLSPACING":"0", "CELLPADDING": "0", "PADDING": "0"})
+            table = ET.Element("TABLE", {"BORDER":"1", "CELLBORDER":"1", "CELLSPACING":"0", "CELLPADDING": "0"})
             tr_class = ET.SubElement(table, "TR")
             td_class = ET.SubElement(tr_class, "TD", {"BGCOLOR": head_bgcolor})
             font = ET.SubElement(td_class, "FONT", {"COLOR": font_color})
