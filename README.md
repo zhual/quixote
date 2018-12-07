@@ -177,6 +177,7 @@ if "__main__" == __name__:
 ```
 
 The example's result will be like below.
+![sample-graph](image/sample-graph.png)
 ```
 ['Johanna', 'Steve'] 
 Press Enter to continue...
