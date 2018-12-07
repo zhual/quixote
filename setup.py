@@ -11,7 +11,7 @@ setuptools.setup(
     description="A minimal dataflow based computational graph library",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://dev.tencent.com/u/ZJJ92/p/QuixoteCore",
+    url="https://github.com/CallmeNezha/quixote",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
