@@ -397,7 +397,10 @@ class QGraph:
             os.environ["PATH"] += os.pathsep + os.path.abspath(r'C:\ProgramData\Miniconda3\Library\bin\graphviz')
 
         # dot.render(view=True)
-        dot.view(cleanup=True)
+        # dot.view(cleanup=True)
+        #TODO: windows graphviz permission error (2018-12-12 11:38:01)
+        import tempfile 
+        dot.view(tempfile.mktemp('.gv'), cleanup=True)
 
     def style(self, node: QNode) -> str:
         head_bgcolor = "BLACK" if self._dirty[node] else "GREEN"
